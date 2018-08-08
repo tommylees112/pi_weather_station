@@ -1,0 +1,9 @@
+# wpa files (connection to eduroam)
+wpa_*
+wpa_supplicant2.conf
+wpa_supplicant.conf
+*.conf
+
+# gpiozero library (here for understanding)
+python-gpiozero/*
+python-gpiozero
