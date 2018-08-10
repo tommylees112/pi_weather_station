@@ -7,3 +7,7 @@ wpa_supplicant.conf
 # gpiozero library (here for understanding)
 python-gpiozero/*
 python-gpiozero
+
+# rpicustomiser library
+rpicustomiser/*
+rpicustomiser
