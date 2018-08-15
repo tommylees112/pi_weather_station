@@ -84,7 +84,7 @@ if CSVOUTPUT:
 
   csvfile.write("Pi Weather station data, initialised "+time.asctime()+"\n")
   csvfile.write("Format YYYY-MM-DDTHH:MM:SS, Temperature [degC], Wind speed [km/h], Rainfall [mm]\n")
-  csvfile.write("Temperature is instantaneous, wind speed is averaged since previous measurement,\n"
+  csvfile.write("Temperature is instantaneous, wind speed is averaged since previous measurement,\n")
   csvfile.write("rainfall is accumulated since previous measurement.\n")
   csvfile.write("\n")
   csvfile.flush()
