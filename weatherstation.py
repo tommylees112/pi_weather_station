@@ -95,15 +95,11 @@ if CSVOUTPUT:
   else:
     measurement_id = max([int(id.split("_")[-1]) for id in all_ids])+1
 
-  csvfile = open("data/pws_{:04d}.csv".format(4),"w")
+  csvfile = open("data/pws_{:04d}.csv".format(measurement_id),"w")
   csvfile.write("Tommy is great.\n")
   csvfile.write("Milan too.")
   csvfile.flush()
   csvfile.close()
-
-
-
-
 
 ##EXECUTABLE CODE##
 
