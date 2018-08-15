@@ -115,7 +115,7 @@ else:
     # differene to last measurement is used to determine the wind speed in that period
     # wind speed is going to be an average of the period ending at time stamp
     time_of_this_measurement = time.time()
-    windspeed_value = round(wind(time_of_this_measurement-time_of_prev_measurement,2))
+    windspeed_value = round(wind(time_of_this_measurement-time_of_prev_measurement),2)
 
     # get instantaneous temperature measurement
     temp_value = temp_sensor.get_temperature()
