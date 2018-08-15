@@ -11,3 +11,6 @@ python-gpiozero
 # rpicustomiser library
 rpicustomiser/*
 rpicustomiser
+
+# data is stored as .csv
+*.csv

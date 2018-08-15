@@ -4,9 +4,8 @@ from time import sleep, time  #Used to suppress temperature sensor input
 from gpiozero import DigitalInputDevice #A low level library that interfaces directly with the hardware
 from w1thermsensor import W1ThermSensor #An interface library produced by the makers of the temperature sensor
 import math
-
-# import pandas as pd
-# import numpy as np
+import os
+import glob
 
 ##FUNCTIONS##
 
@@ -71,12 +70,40 @@ def average_over_time():
 wind_count = 0
 bucket_count = 0
 radius_cm = 9.0
-WIND_SLEEP_TIME= 0.5
-TEMP_SLEEP_TIME=5
+WIND_SLEEP_TIME = 0.5
+TEMP_SLEEP_TIME = 5
 ADJUSTMENT = 1.18 #This calibration constant accounts for the mass of the anemometer.
 CM_IN_A_KM = 100000.0
 SECS_IN_AN_HOUR = 3600
 BUCKET_SIZE = 0.2794
+CSVOUTPUT = 1
+OUTPUT_DT = 30  # in seconds
+
+if CSVOUTPUT:
+
+  # create data folder if not already existing
+  try:
+    os.mkdir("data")
+  except:
+    pass
+
+  # get measurement id
+  all_ids = glob.glob("data/pws_????.csv")
+
+  if not all_ids: # empty list
+    measurement_id = 0
+  else:
+    measurement_id = max([int(id.split("_")[-1]) for id in all_ids])+1
+
+  csvfile = open("data/pws_{:04d}.csv".format(4),"w")
+  csvfile.write("Tommy is great.\n")
+  csvfile.write("Milan too.")
+  csvfile.flush()
+  csvfile.close()
+
+
+
+
 
 ##EXECUTABLE CODE##
 
@@ -101,6 +128,7 @@ tempdata.start()
 #increment wind_count and bucket_count
 wind_speed_sensor.when_activated = spin
 rain_sensor.when_activated = rain
+
 
 #perpetually prints the wind speed sleeping for every WIND_SLEEP_TIME seconds
 while True:
