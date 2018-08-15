@@ -37,7 +37,7 @@ def rain():
 
 def temperature():
 	while True:
-		temp = sensor.get_temperature()
+		temp = temp_sensor.get_temperature()
 		print("The Temperature is %s celsius \n" % temp)
 		time.sleep(TEMP_SLEEP_TIME) #this sleep function prevents the thermometer from logging continously
 
@@ -57,7 +57,7 @@ CM_IN_A_KM = 100000.0
 SECS_IN_AN_HOUR = 3600
 BUCKET_SIZE = 0.2794
 CSVOUTPUT = 1
-OUTPUT_DT = 30  # in seconds
+OUTPUT_DT = 5  # in seconds
 
 if CSVOUTPUT:
 
@@ -83,42 +83,49 @@ if CSVOUTPUT:
   csvfile.write("Format YYYY-MM-DDTHH:MM:SS, Temperature [degC], Wind speed [km/h], Rainfall [mm]\n")
   csvfile.write("Temperature and wind speed are instantaneous, rainfall is accumulated since previous measurement.\n")
   csvfile.write("\n")
-
-  # test write
-  for i in range(10):
-    csvfile.write(timestring()+", 0.0, 0.0, 0.0\n")
-    csvfile.flush()
-    time.sleep(5)
-
-  csvfile.close()
+  csvfile.flush()
 
 ##EXECUTABLE CODE##
 
 #Initialises the three sensors.
 #first input to DigitalinputDevice denotes the GPIO pin the sensor is connected to.
-sensor = W1ThermSensor()
+temp_sensor = W1ThermSensor()
 wind_speed_sensor = DigitalInputDevice(17, pull_up=True)
 rain_sensor = DigitalInputDevice(27, pull_up=True)
 
 #Initialises three threads which track the three sensors.
 #Each is linked to one of the functions defined above which will print information to terminal
-windspeed = threading.Thread(name='wind', target=wind(WIND_SLEEP_TIME))
-raindata = threading.Thread(name='rain', target=rain)
-tempdata = threading.Thread(name='temperature', target=temperature)
+# windspeed = threading.Thread(name='wind', target=wind(WIND_SLEEP_TIME))
+# raindata = threading.Thread(name='rain', target=rain)
 
-windspeed.start()
-raindata.start()
-tempdata.start()
+if CSVOUTPUT == 0:
+  tempdata = threading.Thread(name='temperature', target=temperature)
+  tempdata.start()
+else:
+  for i in range(10):
+    temp = temp_sensor.get_temperature()
+    csvfile.write(timestring()+", "+str(temp)+"\n")
+    csvfile.flush()
+    time.sleep(OUTPUT_DT)
+
+csvfile.close()
+
+
+
+# windspeed.start()
+# raindata.start()
+
 
 #The hardware will set the 'when_activated' property of the wind and rain sensors to True
 #when an input is received. This will trigger the corresponding spin and rain functions which
 #increment wind_count and bucket_count
-wind_speed_sensor.when_activated = spin
-rain_sensor.when_activated = rain
+# wind_speed_sensor.when_activated = spin
+# rain_sensor.when_activated = rain
 
-
+"""
 #perpetually prints the wind speed sleeping for every WIND_SLEEP_TIME seconds
 while True:
   print("The wind speed is " + str(round(wind(WIND_SLEEP_TIME),2)) + "kph \n")
   print("The cumulative rainfall is currently" + str(rainfall) + " mm\n")
   time.sleep(WIND_SLEEP_TIME)
+"""
