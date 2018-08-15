@@ -26,14 +26,17 @@ def wind(time_sec):
 
 def spin():
 	global wind_count
-	wind_count = wind_count + 1
+	wind_count += 1
 
-def rain():
-  global rainfall
+def bucket_tip():
   global bucket_count
-  bucket_count = bucket_count + 1
-  rainfall = BUCKET_SIZE*(bucket_count - 1) # ignore initial bucket count occuring when switch on
-  print("rainfall is currently: " + str(rainfall) + " mm\n")
+  bucket_count += 1
+
+def rainfall():
+  global bucket_count
+  rain_value = BUCKET_SIZE*bucket_count # ignore initial bucket count occuring when switch on
+  bucket_count = 0
+  return rain_value
 
 def temperature():
 	while True:
@@ -57,7 +60,7 @@ CM_IN_A_KM = 100000.0
 SECS_IN_AN_HOUR = 3600
 BUCKET_SIZE = 0.2794
 CSVOUTPUT = 1
-OUTPUT_DT = 5  # in seconds
+OUTPUT_DT = 3  # in seconds
 
 if CSVOUTPUT:
 
@@ -81,7 +84,7 @@ if CSVOUTPUT:
 
   csvfile.write("Pi Weather station data, initialised "+time.asctime()+"\n")
   csvfile.write("Format YYYY-MM-DDTHH:MM:SS, Temperature [degC], Wind speed [km/h], Rainfall [mm]\n")
-  csvfile.write("Temperature and wind speed are instantaneous, rainfall is accumulated since previous measurement.\n")
+  csvfile.write("Temperature is instantaneous, wind speed is averaged since previous measurement, rainfall is accumulated since previous measurement.\n")
   csvfile.write("\n")
   csvfile.flush()
 
@@ -96,14 +99,21 @@ rain_sensor = DigitalInputDevice(27, pull_up=True)
 #Initialises three threads which track the three sensors.
 #Each is linked to one of the functions defined above which will print information to terminal
 windspeed = threading.Thread(name='wind', target=wind(WIND_SLEEP_TIME))
-# raindata = threading.Thread(name='rain', target=rain)
+raindata = threading.Thread(name='rain', target=rainfall)
 
-
+# start the threads
+raindata.start()
 windspeed.start()
-wind_speed_sensor.when_activated = spin
-time_of_prev_measurement = time.time()   # initial time measurement
 
-# raindata.start()
+#The hardware will set the 'when_activated' property of the wind and rain sensors to True
+#when an input is received. This will trigger the corresponding spin and bucket_tip functions which
+#increment wind_count and bucket_count
+wind_speed_sensor.when_activated = spin
+rain_sensor.when_activated = bucket_tip
+
+# initial time to calculate interval between measurements
+time_of_prev_measurement = time.time()
+
 
 if CSVOUTPUT == 0:
   tempdata = threading.Thread(name='temperature', target=temperature)
@@ -119,12 +129,16 @@ else:
 
     # get instantaneous temperature measurement
     temp_value = temp_sensor.get_temperature()
-    csvfile.write(timestring()+", "+str(temp_value)+", "+str(windspeed_value)+"\n")
+
+    # get accumulated rainfall in mm, functions updates the global rain_value
+    rain_value = rainfall()
+
+    csvfile.write(timestring()+", "+str(temp_value)+", "+str(windspeed_value)+", "+str(rain_value)+"\n")
     csvfile.flush()
 
     # this becomes previous
     time_of_prev_measurement = time_of_this_measurement
-    print("Measurement {:02d}i taken.\n".format(i))
+    print("Measurement {:02d} taken.\n".format(i))
     time.sleep(OUTPUT_DT)
 
 csvfile.close()
@@ -134,9 +148,7 @@ csvfile.close()
 
 
 
-#The hardware will set the 'when_activated' property of the wind and rain sensors to True
-#when an input is received. This will trigger the corresponding spin and rain functions which
-#increment wind_count and bucket_count
+
 # wind_speed_sensor.when_activated = spin
 # rain_sensor.when_activated = rain
 
