@@ -124,7 +124,7 @@ else:
 
     # this becomes previous
     time_of_prev_measurement = time_of_this_measurement
-
+    print("Measurement {:02d}i taken.\n".format(i))
     time.sleep(OUTPUT_DT)
 
 csvfile.close()
