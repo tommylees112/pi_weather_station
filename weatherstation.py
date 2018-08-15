@@ -115,7 +115,7 @@ rain_sensor.when_activated = bucket_tip
 # initial time to calculate interval between measurements
 time_of_prev_measurement = time.time()
 
-for i in range(10):
+for i in range(30):
 
   # measure time in seconds each instant of output
   # differene to last measurement is used to determine the wind speed in that period
@@ -135,11 +135,12 @@ for i in range(10):
     csvfile.write(outputstring)
     csvfile.flush()
   else:
-    print(outputstring)
+    print(outputstring[:-2])
 
   # this becomes previous
   time_of_prev_measurement = time_of_this_measurement
-  print("Measurement {:02d} taken.\n".format(i))
+  #print("Measurement {:02d} taken.\n".format(i))
   time.sleep(OUTPUT_DT)
 
-csvfile.close()
+if CSVOUTPUT:
+  csvfile.close()
