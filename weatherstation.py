@@ -95,25 +95,43 @@ rain_sensor = DigitalInputDevice(27, pull_up=True)
 
 #Initialises three threads which track the three sensors.
 #Each is linked to one of the functions defined above which will print information to terminal
-# windspeed = threading.Thread(name='wind', target=wind(WIND_SLEEP_TIME))
+windspeed = threading.Thread(name='wind', target=wind(WIND_SLEEP_TIME))
 # raindata = threading.Thread(name='rain', target=rain)
+
+
+windspeed.start()
+wind_speed_sensor.when_activated = spin
+time_of_prev_measurement = time.time()   # initial time measurement
+
+# raindata.start()
 
 if CSVOUTPUT == 0:
   tempdata = threading.Thread(name='temperature', target=temperature)
   tempdata.start()
 else:
   for i in range(10):
-    temp = temp_sensor.get_temperature()
-    csvfile.write(timestring()+", "+str(temp)+"\n")
+
+    # measure time in seconds each instant of output
+    # differene to last measurement is used to determine the wind speed in that period
+    # wind speed is going to be an average of the period ending at time stamp
+    time_of_this_measurement = time.time()
+    windspeed_value = round(wind(time_of_this_measurement-time_of_prev_measurement,2))
+
+    # get instantaneous temperature measurement
+    temp_value = temp_sensor.get_temperature()
+    csvfile.write(timestring()+", "+str(temp_value)+", "+str(windspeed_value)+"\n")
     csvfile.flush()
+
+    # this becomes previous
+    time_of_prev_measurement = time_of_this_measurement
+
     time.sleep(OUTPUT_DT)
 
 csvfile.close()
 
 
 
-# windspeed.start()
-# raindata.start()
+
 
 
 #The hardware will set the 'when_activated' property of the wind and rain sensors to True
