@@ -59,8 +59,8 @@ ADJUSTMENT = 1.18 #This calibration constant accounts for the mass of the anemom
 CM_IN_A_KM = 100000.0
 SECS_IN_AN_HOUR = 3600
 BUCKET_SIZE = 0.2794
-CSVOUTPUT = 1
-OUTPUT_DT = 3  # in seconds
+CSVOUTPUT = 0
+OUTPUT_DT = 5  # in seconds
 
 if CSVOUTPUT:
 
@@ -84,7 +84,8 @@ if CSVOUTPUT:
 
   csvfile.write("Pi Weather station data, initialised "+time.asctime()+"\n")
   csvfile.write("Format YYYY-MM-DDTHH:MM:SS, Temperature [degC], Wind speed [km/h], Rainfall [mm]\n")
-  csvfile.write("Temperature is instantaneous, wind speed is averaged since previous measurement, rainfall is accumulated since previous measurement.\n")
+  csvfile.write("Temperature is instantaneous, wind speed is averaged since previous measurement,\n"
+  csvfile.write("rainfall is accumulated since previous measurement.\n")
   csvfile.write("\n")
   csvfile.flush()
 
@@ -114,48 +115,31 @@ rain_sensor.when_activated = bucket_tip
 # initial time to calculate interval between measurements
 time_of_prev_measurement = time.time()
 
+for i in range(10):
 
-if CSVOUTPUT == 0:
-  tempdata = threading.Thread(name='temperature', target=temperature)
-  tempdata.start()
-else:
-  for i in range(10):
+  # measure time in seconds each instant of output
+  # differene to last measurement is used to determine the wind speed in that period
+  # wind speed is going to be an average of the period ending at time stamp
+  time_of_this_measurement = time.time()
+  windspeed_value = round(wind(time_of_this_measurement-time_of_prev_measurement),2)
 
-    # measure time in seconds each instant of output
-    # differene to last measurement is used to determine the wind speed in that period
-    # wind speed is going to be an average of the period ending at time stamp
-    time_of_this_measurement = time.time()
-    windspeed_value = round(wind(time_of_this_measurement-time_of_prev_measurement),2)
+  # get instantaneous temperature measurement
+  temp_value = temp_sensor.get_temperature()
 
-    # get instantaneous temperature measurement
-    temp_value = temp_sensor.get_temperature()
+  # get accumulated rainfall in mm, functions updates the global rain_value
+  rain_value = rainfall()
 
-    # get accumulated rainfall in mm, functions updates the global rain_value
-    rain_value = rainfall()
+  outputstring = timestring()+", "+str(temp_value)+", "+str(windspeed_value)+", "+str(rain_value)+"\n"
 
-    csvfile.write(timestring()+", "+str(temp_value)+", "+str(windspeed_value)+", "+str(rain_value)+"\n")
+  if CSVOUTPUT:
+    csvfile.write(outputstring)
     csvfile.flush()
+  else:
+    print(outputstring)
 
-    # this becomes previous
-    time_of_prev_measurement = time_of_this_measurement
-    print("Measurement {:02d} taken.\n".format(i))
-    time.sleep(OUTPUT_DT)
+  # this becomes previous
+  time_of_prev_measurement = time_of_this_measurement
+  print("Measurement {:02d} taken.\n".format(i))
+  time.sleep(OUTPUT_DT)
 
 csvfile.close()
-
-
-
-
-
-
-
-# wind_speed_sensor.when_activated = spin
-# rain_sensor.when_activated = rain
-
-"""
-#perpetually prints the wind speed sleeping for every WIND_SLEEP_TIME seconds
-while True:
-  print("The wind speed is " + str(round(wind(WIND_SLEEP_TIME),2)) + "kph \n")
-  print("The cumulative rainfall is currently" + str(rainfall) + " mm\n")
-  time.sleep(WIND_SLEEP_TIME)
-"""
