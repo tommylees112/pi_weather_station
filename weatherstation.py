@@ -99,14 +99,16 @@ temp_sensor = W1ThermSensor()
 wind_speed_sensor = DigitalInputDevice(17, pull_up=True)
 rain_sensor = DigitalInputDevice(27, pull_up=True)
 
+"""
 #Initialises three threads which track the three sensors.
 #Each is linked to one of the functions defined above which will print information to terminal
-windspeed = threading.Thread(name='wind', target=wind(WIND_SLEEP_TIME))
+windspeed = threading.Thread(name='wind', target=wind)
 raindata = threading.Thread(name='rain', target=rainfall)
 
 # start the threads
 raindata.start()
 windspeed.start()
+"""
 
 #The hardware will set the 'when_activated' property of the wind and rain sensors to True
 #when an input is received. This will trigger the corresponding spin and bucket_tip functions which
