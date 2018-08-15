@@ -53,8 +53,6 @@ def timestring():
 wind_count = 0
 bucket_count = 0
 radius_cm = 9.0
-WIND_SLEEP_TIME = 0.5
-TEMP_SLEEP_TIME = 5
 ADJUSTMENT = 1.18 #This calibration constant accounts for the mass of the anemometer.
 CM_IN_A_KM = 100000.0
 SECS_IN_AN_HOUR = 3600
@@ -62,6 +60,7 @@ BUCKET_SIZE = 0.2794
 CSVOUTPUT = 0
 OUTPUT_DT = 5  # in seconds
 
+## INITIAILISE CSV OUTPUT
 if CSVOUTPUT:
 
   # create data folder if not already existing
@@ -78,7 +77,8 @@ if CSVOUTPUT:
   else:
     measurement_id = max([int(id[-8:-4]) for id in all_ids])+1
 
-  csvfile = open("data/pws_{:04d}.csv".format(measurement_id),"w")
+  filepath = "data/pws_{:04d}.csv".format(measurement_id)
+  csvfile = open(filepath,"w")
 
   # Write header
 
@@ -88,6 +88,8 @@ if CSVOUTPUT:
   csvfile.write("rainfall is accumulated since previous measurement.\n")
   csvfile.write("\n")
   csvfile.flush()
+
+  print("Pi Weather station, recording to "+filepath)
 
 ##EXECUTABLE CODE##
 
@@ -115,7 +117,7 @@ rain_sensor.when_activated = bucket_tip
 # initial time to calculate interval between measurements
 time_of_prev_measurement = time.time()
 
-for i in range(30):
+while True:
 
   # measure time in seconds each instant of output
   # differene to last measurement is used to determine the wind speed in that period
@@ -129,18 +131,14 @@ for i in range(30):
   # get accumulated rainfall in mm, functions updates the global rain_value
   rain_value = rainfall()
 
-  outputstring = timestring()+", "+str(temp_value)+", "+str(windspeed_value)+", "+str(rain_value)+"\n"
+  outputstring = timestring()+", "+str(temp_value)+", "+str(windspeed_value)+", "+str(rain_value)
 
   if CSVOUTPUT:
-    csvfile.write(outputstring)
+    csvfile.write(outputstring+"\n")
     csvfile.flush()
   else:
-    print(outputstring[:-2])
+    print(outputstring)
 
   # this becomes previous
   time_of_prev_measurement = time_of_this_measurement
-  #print("Measurement {:02d} taken.\n".format(i))
   time.sleep(OUTPUT_DT)
-
-if CSVOUTPUT:
-  csvfile.close()
