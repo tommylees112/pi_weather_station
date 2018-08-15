@@ -85,13 +85,10 @@ if CSVOUTPUT:
   csvfile.write("\n")
 
   # test write
-  csvfile.write(timestring()+", 0.0, 0.0, 0.0\n")
-  csvfile.flush()
-
-  time.sleep(30)
-
-  csvfile.write(timestring()+", 0.0, 0.0, 0.1\n")
-  csvfile.flush()
+  for i in range(10):
+    csvfile.write(timestring()+", 0.0, 0.0, 0.0\n")
+    csvfile.flush()
+    time.sleep(5)
 
   csvfile.close()
 
