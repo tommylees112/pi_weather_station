@@ -93,7 +93,7 @@ if CSVOUTPUT:
   if not all_ids: # empty list
     measurement_id = 0
   else:
-    measurement_id = max([int(id[4:8]) for id in all_ids])+1
+    measurement_id = max([int(id[-8:-4]) for id in all_ids])+1
 
   csvfile = open("data/pws_{:04d}.csv".format(measurement_id),"w")
   csvfile.write("Tommy is great.\n")
