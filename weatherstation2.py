@@ -1,9 +1,12 @@
 ##IMPORTED MODULES##
-import threading #Enables parrallel execution of code so all three sensors can be monitored and logged simultaneously 
-from time import sleep #Used to suppress temperature sensor input 
+import threading #Enables parrallel execution of code so all three sensors can be monitored and logged simultaneously
+from time import sleep, time  #Used to suppress temperature sensor input
 from gpiozero import DigitalInputDevice #A low level library that interfaces directly with the hardware
 from w1thermsensor import W1ThermSensor #An interface library produced by the makers of the temperature sensor
 import math
+
+# import pandas as pd
+# import numpy as np
 
 ##FUNCTIONS##
 
@@ -27,15 +30,42 @@ def spin():
 	wind_count = wind_count + 1
 
 def rain():
-	global bucket_count
-	bucket_count = bucket_count + 1
-	print("rainfall is currently" + str(round(bucket_count * BUCKET_SIZE,2))+"mm\n")
+  global rainfall
+  global bucket_count
+  bucket_count = bucket_count + 1
+  rainfall = BUCKET_SIZE*(bucket_count - 1) # ignore initial bucket count occuring when switch on
+  print("rainfall is currently: " + str(rainfall) + " mm\n")
 
 def temperature():
 	while True:
 		temp = sensor.get_temperature()
 		print("The Temperature is %s celsius \n" % temp)
 		sleep(TEMP_SLEEP_TIME) #this sleep function prevents the thermometer from logging continously
+
+##DATA I/O##
+def store_in_numpy_array():
+  """ take the raw data and append to a numpy array """
+  pass
+
+def merge_numpy_arrays_to_matrix():
+  """ store numpy arrays in format:
+       ---------------------------------------
+      |temp (oc) | rain(mm) | wind_speed(km/h)|
+      |---------------------------------------
+      |          |          |                 |
+  """
+  pass
+
+def write_to_csv():
+  """ take the numpy array and write to .csv file
+       output = savetxt(filename, data, fmt='%.18e', delimiter=',')
+  """
+  pass
+
+def average_over_time():
+  """ for temperature, wind_speed and
+  """
+  array.mean()
 
 ##CONSTANTS##
 wind_count = 0
@@ -48,16 +78,15 @@ CM_IN_A_KM = 100000.0
 SECS_IN_AN_HOUR = 3600
 BUCKET_SIZE = 0.2794
 
-
 ##EXECUTABLE CODE##
 
 #Initialises the three sensors.
 #first input to DigitalinputDevice denotes the GPIO pin the sensor is connected to.
 sensor = W1ThermSensor()
-wind_speed_sensor = DigitalinputDevice(17, pull_up=True)
-rain_sensor = DigitalinputDevice(27, pull_up=True)
+wind_speed_sensor = DigitalInputDevice(17, pull_up=True)
+rain_sensor = DigitalInputDevice(27, pull_up=True)
 
-#Initialises three threads which track the three sensors. 
+#Initialises three threads which track the three sensors.
 #Each is linked to one of the functions defined above which will print information to terminal
 windspeed = threading.Thread(name='wind', target=wind(WIND_SLEEP_TIME))
 raindata = threading.Thread(name='rain', target=rain)
@@ -77,3 +106,4 @@ rain_sensor.when_activated = rain
 while True:
 	sleep(WIND_SLEEP_TIME)
 	print("The wind speed is " + str(round(wind(WIND_SLEEP_TIME),2) + "kph \n"))
+  print("The cumulative rainfall is currently" + str(rainfall) + " mm\n")
