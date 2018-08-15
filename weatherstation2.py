@@ -104,6 +104,6 @@ rain_sensor.when_activated = rain
 
 #perpetually prints the wind speed sleeping for every WIND_SLEEP_TIME seconds
 while True:
-	sleep(WIND_SLEEP_TIME)
 	print("The wind speed is " + str(round(wind(WIND_SLEEP_TIME),2) + "kph \n"))
   print("The cumulative rainfall is currently" + str(rainfall) + " mm\n")
+  sleep(WIND_SLEEP_TIME)
