@@ -1,6 +1,6 @@
 ##IMPORTED MODULES##
 import threading #Enables parrallel execution of code so all three sensors can be monitored and logged simultaneously
-from time import sleep, time  #Used to suppress temperature sensor input
+import time  #Used to suppress temperature sensor input
 from gpiozero import DigitalInputDevice #A low level library that interfaces directly with the hardware
 from w1thermsensor import W1ThermSensor #An interface library produced by the makers of the temperature sensor
 import math
@@ -39,32 +39,12 @@ def temperature():
 	while True:
 		temp = sensor.get_temperature()
 		print("The Temperature is %s celsius \n" % temp)
-		sleep(TEMP_SLEEP_TIME) #this sleep function prevents the thermometer from logging continously
+		time.sleep(TEMP_SLEEP_TIME) #this sleep function prevents the thermometer from logging continously
 
-##DATA I/O##
-def store_in_numpy_array():
-  """ take the raw data and append to a numpy array """
-  pass
+def timestring():
+  return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
 
-def merge_numpy_arrays_to_matrix():
-  """ store numpy arrays in format:
-       ---------------------------------------
-      |temp (oc) | rain(mm) | wind_speed(km/h)|
-      |---------------------------------------
-      |          |          |                 |
-  """
-  pass
 
-def write_to_csv():
-  """ take the numpy array and write to .csv file
-       output = savetxt(filename, data, fmt='%.18e', delimiter=',')
-  """
-  pass
-
-def average_over_time():
-  """ for temperature, wind_speed and
-  """
-  array.mean()
 
 ##CONSTANTS##
 wind_count = 0
@@ -96,9 +76,23 @@ if CSVOUTPUT:
     measurement_id = max([int(id[-8:-4]) for id in all_ids])+1
 
   csvfile = open("data/pws_{:04d}.csv".format(measurement_id),"w")
-  csvfile.write("Tommy is great.\n")
-  csvfile.write("Milan too.")
+
+  # Write header
+
+  csvfile.write("Pi Weather station data, initialised "+time.asctime()+"\n")
+  csvfile.write("Format YYYY-MM-DDTHH:MM:SS, Temperature[degC], Wind speed [km/h], Rainfall [mm]\n")
+  csvfile.write("Temperature and wind speed are instantaneous, rainfall is accumulated since previous measurement.\n")
+  csvfile.write("\n")
+
+  # test write
+  csvfile.write(timestring()+", 0.0, 0.0, 0.0\n")
   csvfile.flush()
+
+  time.sleep(2)
+
+  csvfile.write(timestring()+", 0.0, 0.0, 0.1\n")
+  csvfile.flush()
+
   csvfile.close()
 
 ##EXECUTABLE CODE##
@@ -130,4 +124,4 @@ rain_sensor.when_activated = rain
 while True:
   print("The wind speed is " + str(round(wind(WIND_SLEEP_TIME),2)) + "kph \n")
   print("The cumulative rainfall is currently" + str(rainfall) + " mm\n")
-  sleep(WIND_SLEEP_TIME)
+  time.sleep(WIND_SLEEP_TIME)
