@@ -3,10 +3,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import dateutil.parser
 import datetime
+import glob
 
 # OPTIONS
 path = "/Users/milan/git/pi_weather_station/data/"
-file_ids = [5,6,7]
+codenames = ["blackberry"]
 
 # preallocate
 time = []
@@ -14,28 +15,49 @@ temp = []
 rain = []
 wind = []
 
-for fid in file_ids:
+for cn in codenames:
+
+    # concatenate dataset for a given codename
     
-    filename = "pws_{:04d}.csv".format(fid)
-    dat = pd.read_csv(path+filename,header=4)
+    # preallocate
+    time_cn = []
+    temp_cn = []
+    rain_cn = []
+    wind_cn = []
+    
+    # find all files for given codename
+    all_ids = glob.glob(path+"pws_"+cn+"_????.csv")
+    
+    for file in all_ids:
+    
+        dat = pd.read_csv(file,header=4)
 
-    temp.append(np.array(dat.iloc[:,1]))
-    wind.append(np.array(dat.iloc[:,2]))
-    rain.append(np.array(dat.iloc[:,3]))
-
-    # convert time strings to datetime objects
-    timestrings = list(dat.iloc[:,0])
-    time.append([dateutil.parser.parse(s) for s in timestrings])
+        temp_cn.append(list(dat.iloc[:,1]))
+        wind_cn.append(list(dat.iloc[:,2]))
+        rain_cn.append(list(dat.iloc[:,3]))
+    
+        # convert time strings to datetime objects
+        timestrings = list(dat.iloc[:,0])
+        time_cn.append([dateutil.parser.parse(s) for s in timestrings])
+    
+    time.append(time_cn)
+    temp.append(temp_cn)
+    rain.append(rain_cn)
+    wind.append(wind_cn)
 
 ## plotting
 
 fig,(ax1,ax2,ax3) = plt.subplots(3,1,sharex=True)
 
-for i in range(len(file_ids)):
-    ax1.plot(time[i],temp[i])
-    ax2.plot(time[i],rain[i])
-    ax3.plot(time[i],wind[i],label="id="+str(i))
-    
+for i,cn in enumerate(codenames):
+    for j in range(len(time[i])):
+        ax1.plot(time[i][j],temp[i][j],"C"+str(i))
+        ax2.plot(time[i][j],rain[i][j],"C"+str(i))
+        ax3.plot(time[i][j],wind[i][j],"C"+str(i))
+
+# fake data for legend
+for i,cn in enumerate(codenames):
+    ax3.plot(time[0][0],0,"C"+str(i),label=cn)    
 
 ax3.legend(loc=1)
 
