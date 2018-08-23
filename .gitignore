@@ -14,3 +14,10 @@ rpicustomiser
 
 # data is stored as .csv
 *.csv
+
+#
+cattlepi/*
+cattlepi
+
+#
+login_pi.sh

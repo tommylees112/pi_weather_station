@@ -1,9 +1,7 @@
 ##IMPORTED MODULES##
-import threading #Enables parrallel execution of code so all three sensors can be monitored and logged simultaneously
 import time  #Used to suppress temperature sensor input
 from gpiozero import DigitalInputDevice #A low level library that interfaces directly with the hardware
 from w1thermsensor import W1ThermSensor #An interface library produced by the makers of the temperature sensor
-import math
 import os
 import glob
 
@@ -13,7 +11,7 @@ import glob
 #They are executed whenever a new input is received from the corresponding sensor.
 def wind(time_sec):
 	global wind_count
-	circumference_cm = (2 * math.pi) * radius_cm
+	circumference_cm = (2 * 3.14159) * radius_cm
 	rotations = wind_count / 2.0 #wind count tracks half rotations of the anemometer. Incremented by spin()
 	wind_count = 0
 
@@ -46,8 +44,6 @@ def temperature():
 
 def timestring():
   return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
-
-
 
 ##CONSTANTS##
 wind_count = 0
@@ -100,17 +96,6 @@ temp_sensor = W1ThermSensor()
 wind_speed_sensor = DigitalInputDevice(17, pull_up=True)
 rain_sensor = DigitalInputDevice(27, pull_up=True)
 
-"""
-#Initialises three threads which track the three sensors.
-#Each is linked to one of the functions defined above which will print information to terminal
-windspeed = threading.Thread(name='wind', target=wind)
-raindata = threading.Thread(name='rain', target=rainfall)
-
-# start the threads
-raindata.start()
-windspeed.start()
-"""
-
 #The hardware will set the 'when_activated' property of the wind and rain sensors to True
 #when an input is received. This will trigger the corresponding spin and bucket_tip functions which
 #increment wind_count and bucket_count
@@ -132,7 +117,7 @@ while True:
   temp_value = temp_sensor.get_temperature()
 
   # get accumulated rainfall in mm, functions updates the global rain_value
-  rain_value = rainfall()
+  rain_value = round(rainfall(),2)
 
   outputstring = timestring()+", "+str(temp_value)+", "+str(windspeed_value)+", "+str(rain_value)
 
