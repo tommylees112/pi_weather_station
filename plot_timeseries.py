@@ -6,7 +6,7 @@ import datetime
 
 # OPTIONS
 path = "/Users/milan/git/pi_weather_station/data/"
-file_ids = [5,6]
+file_ids = [5,6,7]
 
 # preallocate
 time = []
