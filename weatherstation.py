@@ -55,7 +55,7 @@ SECS_IN_AN_HOUR = 3600
 BUCKET_SIZE = 0.2794
 CSVOUTPUT = 1
 OUTPUT_DT = 5  # in seconds
-path = "~/pi_weather_station/"
+path = "/home/pi/pi_weather_station/"
 codename = "blackberry"
 
 
