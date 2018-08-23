@@ -57,7 +57,7 @@ ADJUSTMENT = 1.18 #This calibration constant accounts for the mass of the anemom
 CM_IN_A_KM = 100000.0
 SECS_IN_AN_HOUR = 3600
 BUCKET_SIZE = 0.2794
-CSVOUTPUT = 0
+CSVOUTPUT = 1
 OUTPUT_DT = 5  # in seconds
 
 ## INITIAILISE CSV OUTPUT
@@ -87,6 +87,7 @@ if CSVOUTPUT:
   csvfile.write("Temperature is instantaneous, wind speed is averaged since previous measurement,\n")
   csvfile.write("rainfall is accumulated since previous measurement.\n")
   csvfile.write("\n")
+  csvfile.write("time,temperature_degC,wind_speed_km/s,rainfall_mm\n")
   csvfile.flush()
 
   print("Pi Weather station, recording to "+filepath)
