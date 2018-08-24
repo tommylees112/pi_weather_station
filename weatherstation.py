@@ -1,30 +1,30 @@
-##IMPORTED MODULES##
+## IMPORTED MODULES
 import time  #Used to suppress temperature sensor input
 from gpiozero import DigitalInputDevice #A low level library that interfaces directly with the hardware
 from w1thermsensor import W1ThermSensor #An interface library produced by the makers of the temperature sensor
 import os
 import glob
 
-##FUNCTIONS##
+## FUNCTIONS
 
 #These functions record and log the input from the sensors.
 #They are executed whenever a new input is received from the corresponding sensor.
 def wind(time_sec):
-	global wind_count
-	circumference_cm = (2 * 3.14159) * radius_cm
-	rotations = wind_count / 2.0 #wind count tracks half rotations of the anemometer. Incremented by spin()
-	wind_count = 0
+  global wind_count
+  circumference_cm = (2 * 3.14159) * radius_cm
+  rotations = wind_count / 2.0 #wind count tracks half rotations of the anemometer. Incremented by spin()
+  wind_count = 0
 
-	dist_km = (circumference_cm * rotations) / CM_IN_A_KM
+  dist_km = (circumference_cm * rotations) / CM_IN_A_KM
 
-	km_per_sec = dist_km / time_sec
-	km_per_hour = km_per_sec * SECS_IN_AN_HOUR
+  km_per_sec = dist_km / time_sec
+  km_per_hour = km_per_sec * SECS_IN_AN_HOUR
 
-	return km_per_hour * ADJUSTMENT
+  return km_per_hour * ADJUSTMENT
 
 def spin():
-	global wind_count
-	wind_count += 1
+  global wind_count
+  wind_count += 1
 
 def bucket_tip():
   global bucket_count
@@ -37,15 +37,15 @@ def rainfall():
   return rain_value
 
 def temperature():
-	while True:
-		temp = temp_sensor.get_temperature()
-		print("The Temperature is %s celsius \n" % temp)
-		time.sleep(TEMP_SLEEP_TIME) #this sleep function prevents the thermometer from logging continously
+  while True:
+    temp = temp_sensor.get_temperature()
+    print("The Temperature is %s celsius \n" % temp)
+    time.sleep(TEMP_SLEEP_TIME) #this sleep function prevents the thermometer from logging continously
 
 def timestring():
   return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
 
-##CONSTANTS##
+## CONSTANTS
 wind_count = 0
 bucket_count = 0
 radius_cm = 9.0
@@ -53,36 +53,40 @@ ADJUSTMENT = 1.18 #This calibration constant accounts for the mass of the anemom
 CM_IN_A_KM = 100000.0
 SECS_IN_AN_HOUR = 3600
 BUCKET_SIZE = 0.2794
-CSVOUTPUT = 0
+CSVOUTPUT = 1
 OUTPUT_DT = 5  # in seconds
+path = "/home/pi/pi_weather_station/"
+codename = "blackberry"
+
 
 ## INITIAILISE CSV OUTPUT
 if CSVOUTPUT:
 
   # create data folder if not already existing
   try:
-    os.mkdir("data")
+    os.mkdir(path+"data")
   except:
     pass
 
   # get measurement id
-  all_ids = glob.glob("data/pws_????.csv")
+  all_ids = glob.glob(path+"data/pws_"+codename+"_????.csv")
 
   if not all_ids: # empty list
     measurement_id = 0
   else:
     measurement_id = max([int(id[-8:-4]) for id in all_ids])+1
 
-  filepath = "data/pws_{:04d}.csv".format(measurement_id)
+  filepath = path+"data/pws_"+codename+"_{:04d}.csv".format(measurement_id)
   csvfile = open(filepath,"w")
 
   # Write header
 
-  csvfile.write("Pi Weather station data, initialised "+time.asctime()+"\n")
+  csvfile.write("Pi weather station data from codename "+codename+", initialised "+time.asctime()+"\n")
   csvfile.write("Format YYYY-MM-DDTHH:MM:SS, Temperature [degC], Wind speed [km/h], Rainfall [mm]\n")
   csvfile.write("Temperature is instantaneous, wind speed is averaged since previous measurement,\n")
   csvfile.write("rainfall is accumulated since previous measurement.\n")
   csvfile.write("\n")
+  csvfile.write("time,temperature_degC,wind_speed_km/h,rainfall_mm\n")
   csvfile.flush()
 
   print("Pi Weather station, recording to "+filepath)
@@ -107,7 +111,7 @@ time_of_prev_measurement = time.time()
 while True:
 
   # measure time in seconds each instant of output
-  # differene to last measurement is used to determine the wind speed in that period
+  # differene to last measurement is used to determine the wind speed in that period
   # wind speed is going to be an average of the period ending at time stamp
   time_of_this_measurement = time.time()
   windspeed_value = round(wind(time_of_this_measurement-time_of_prev_measurement),2)
