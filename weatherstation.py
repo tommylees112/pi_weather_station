@@ -55,6 +55,8 @@ SECS_IN_AN_HOUR = 3600
 BUCKET_SIZE = 0.2794
 CSVOUTPUT = 1
 OUTPUT_DT = 5  # in seconds
+WIND_DATA_PIN=17
+RAIN_DATA_PIN=27
 path = "/home/pi/pi_weather_station/"
 codename = "blackberry"
 
@@ -96,8 +98,8 @@ if CSVOUTPUT:
 #Initialises the three sensors.
 #first input to DigitalinputDevice denotes the GPIO pin the sensor is connected to.
 temp_sensor = W1ThermSensor()
-wind_speed_sensor = DigitalInputDevice(17, pull_up=True)
-rain_sensor = DigitalInputDevice(27, pull_up=True)
+wind_speed_sensor = DigitalInputDevice(WIND_DATA_PIN, pull_up=True)
+rain_sensor = DigitalInputDevice(RAIN_DATA_PIN, pull_up=True)
 
 #The hardware will set the 'when_activated' property of the wind and rain sensors to True
 #when an input is received. This will trigger the corresponding spin and bucket_tip functions which
