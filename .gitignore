@@ -14,6 +14,7 @@ rpicustomiser
 
 # data is stored as .csv
 # *.csv
+# .DS_Store
 
 #
 cattlepi/*
