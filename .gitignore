@@ -13,7 +13,10 @@ rpicustomiser/*
 rpicustomiser
 
 # data is stored as .csv
-*.csv
+data/*.csv
+hackathon/2012_2018_1min.csv
+# *.csv
+# .DS_Store
 
 #
 cattlepi/*
@@ -23,3 +26,6 @@ cattlepi
 login_pi.sh
 pi_weather_station.pdf
 pi_logins*
+
+#
+get_online_phys_data/push_to_remote.sh

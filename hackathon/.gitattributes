@@ -1,0 +1,3 @@
+2012_2018_10min.csv filter=lfs diff=lfs merge=lfs -text
+# 2012_2018_1min.csv filter=lfs diff=lfs merge=lfs -text
+2012_2018_30min.csv filter=lfs diff=lfs merge=lfs -text

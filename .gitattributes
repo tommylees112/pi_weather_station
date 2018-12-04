@@ -1,0 +1,2 @@
+# hackathon/2011_2018_10min.csv filter=lfs diff=lfs merge=lfs -text
+# hackathon/2011_2018_30min.csv filter=lfs diff=lfs merge=lfs -text
