@@ -13,7 +13,7 @@ rpicustomiser/*
 rpicustomiser
 
 # data is stored as .csv
-*.csv
+# *.csv
 
 #
 cattlepi/*
