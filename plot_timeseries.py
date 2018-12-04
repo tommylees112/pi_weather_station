@@ -38,7 +38,6 @@ for cn in codenames:
 
         dat = pd.read_csv(file,header=5)
 
-
         temp_cn.append(list(dat.iloc[:,1]))
         wind_cn.append(list(dat.iloc[:,2]))
         rain_cn.append(list(dat.iloc[:,3]))
@@ -57,9 +56,7 @@ for cn in codenames:
             dt = t_start3 - t0
         elif cn == "raspberry":
             dt = datetime.timedelta(hours=0.3)
-
         time_cn.append([dateutil.parser.parse(s)+dt for s in timestrings])
-
 
     time.append(time_cn)
     temp.append(temp_cn)

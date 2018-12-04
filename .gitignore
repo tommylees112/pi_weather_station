@@ -13,8 +13,11 @@ rpicustomiser/*
 rpicustomiser
 
 # data is stored as .csv
+<<<<<<< HEAD
 # data/*.csv
 hackathon/2012_2018_1min.csv
+=======
+>>>>>>> f136264752c5dcece53ef5ff559c231bbd3328a1
 # *.csv
 # .DS_Store
 
