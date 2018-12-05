@@ -4,6 +4,9 @@ Our attempt to make the Makerlife weather stations into an Oxford-wide network o
 
 For use on the DTP Fieldtrip in September 2018
 
+FOR HACKATHON:
+https://docs.google.com/spreadsheets/d/1Zh1kQ_CAJBCYu8eUjiUZ-kEeW5tWFsw-O7QZ8MB_2cs/edit?usp=sharing
+
 ### Kit to buy:
 CPC:
 - https://cpc.farnell.com/sparkfun-electronics/sen-08942/weather-meters-kit/dp/MK00632?mckv=s1f2prvOj_dc|pcrid|224695413754|kword||match||plid||slid||product|MK00632|pgrid|49734137191|ptaid|pla-368614084742|&CMP=KNC-GUK-CPC-SHOPPING&gclid=CjwKCAjwtvnbBRA5EiwAcRvnpkAfWKnzpNPCwOu68B6ICB9kAPP8sgQj0gtWAZR7BPUf-90pRnuaXxoCD30QAvD_BwE
