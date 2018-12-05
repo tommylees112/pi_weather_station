@@ -7,29 +7,18 @@ import glob
 import matplotlib.dates as mdates
 
 df = pd.read_csv('hackathon/2012_2018_30min.csv',index_col=0)
-time = df.index.values
-temp = df.TEMP.values
-rain = df.RAIN.values
-wind = df.WS.values
 
-fig,(ax1,ax2,ax3) = plt.subplots(3,1,sharex=True)
+fig, axs = plt.subplots(3,1)
 
-ax1.plot(time, temp, "C1")
-ax1.plot(time, rain, "C2")
-ax1.plot(time, wind, "C3")
+df.TEMP.plot(ax=axs[0], label="Temperature", title="Temperature (degC)")
+df.RAIN.plot(ax=axs[1], label="Rainfall", title="Rainfall (mm)", color="#FF8214")
+df.WS.plot(ax=axs[2], label="Wind Speed", title="Wind Speed (km/h)", color="#2CA02C")
+axs[0].set_xticks([])
+axs[1].set_xticks([])
 
-ax3.legend(loc=1)
-
-ax1.set_title("Temperature",loc="left")
-ax2.set_title("Precipitation",loc="left")
-ax3.set_title("Wind speed",loc="left")
-
-ax1.set_ylabel("[degC]")
-ax2.set_ylabel("[mm]")
-ax3.set_ylabel("[km/h]")
-
-ax3.set_xlabel("time")
-ax3.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+fig.autofmt_xdate()
 
 plt.tight_layout()
-plt.show()
+
+fig = plt.gcf()
+fig.savefig('hackathon/demo_plot.png')
