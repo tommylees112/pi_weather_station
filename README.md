@@ -144,7 +144,7 @@ which lets you type commands, then hit enter.
 Example: type `ls`, short for *list*, that shows you files and folders in the current directory.
 All Pis already have a folder called `pi_weather_station`.
 
-### Step 2: Changing the pythons script
+### Step 2: Changing the python script
 
 - To change directories in linux we use the command ‘cd’. Move to the
 directory where the script is located by typing `cd pi_weather_station`
@@ -166,7 +166,7 @@ You also want to set ‘codename’ to the name of your pi.
 default suggestion, then you will have to change the value of the DATA_PIN
 constants accordingly
 
-# Part 3: Assembly
+## Part 3: Assembly
 
 You should now have a fully programmed pi, and a fully wired sensor network. All
 that remains now is to make sure that your weatherstation can withstand the
