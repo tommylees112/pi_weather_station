@@ -113,6 +113,8 @@ are using a mac or linux computer all you will need is an open terminal. If you
 are using Windows you will instead need to install the ssh client PuTTy. Your Pi
 will have a unique name stuck on it which will identify it.
 
+### Step 1: Logging in
+
 - Power on the Pi by connecting to the power bank and wait for the light to stop flickering.
 - Connect with your laptop to the local wifi network “pi_wifi” with the password “raspberry”.
 
@@ -142,4 +144,45 @@ which lets you type commands, then hit enter.
 Example: type `ls`, short for *list*, that shows you files and folders in the current directory.
 All Pis already have a folder called `pi_weather_station`.
 
+### Step 2: Changing the pythons script
+
+- To change directories in linux we use the command ‘cd’. Move to the
+directory where the script is located by typing `cd pi_weather_station`
+- To open the file so we can read and edit it, we will use a tool called `nano`.
+Type `nano weatherstation.py` to open the file in your terminal.
+- Since the nano interface can be a little awkward, if you just want to read
+the code and get a sense for how it works, try looking at it on your laptop
+on github at
+
+https://github.com/milankl/pi_weather_station/blob/master/weatherstation.py
+
+- You can edit text intuitively, for saving use cntrl+o then enter, for exiting cntrl+x.
+- You will not need to fiddle too much with the code (unless you want to!),
+but you will want to think about the values of some of the constants.
+CSVOUTPUT controls whether the pi prints results to terminal or saves
+them in a .csv file, and OUTPUT_DT sets the time between measurements.
+You also want to set ‘codename’ to the name of your pi.
+- If you have connected any of the data cables to different pins than the
+default suggestion, then you will have to change the value of the DATA_PIN
+constants accordingly
+
+# Part 3: Assembly
+
+You should now have a fully programmed pi, and a fully wired sensor network. All
+that remains now is to make sure that your weatherstation can withstand the
+weather!
+
+The power pack will need to be connected to the raspberry pi via the USB to
+micro USB connector for it to function. Due to an entirely intentional design
+choice, some power banks we have will not fit into the weatherproof boxes, and so
+they will need to be deployed in a separate Tupperware box. Once the power cable
+is in place, put a ring of blutac around it to create a watertight seal.
+
+Now go out into the world and place your station.
+Make sure that you power on your power bank before leaving!
+
+# Credits
+
+Originally written by Josh Dorrington, Tommy Lees and Milan Kloewer in 2018.
+Changes made in 2022 by Milan Kloewer.
 
