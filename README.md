@@ -166,6 +166,32 @@ You also want to set ‘codename’ to the name of your pi.
 default suggestion, then you will have to change the value of the DATA_PIN
 constants accordingly
 
+For testing purposes you can always do
+
+```
+python weatherstation.py
+```
+if the CSV_OUTPUT is set to 0, it will print measurements to the terminal.
+
+### Step 3: Initialisation script
+
+Once you are happy with the configuration of the python script you must tell the
+pi when the script should be run. To do this, you need to open the `.bashrc` file
+which contains all commands that the pi executes at boot up.
+
+- Type `nano .bashrc` to open the file
+- At the bottom of the file you will need to add
+
+```
+nohup python pi_weather_station/weatherstation.py &
+```
+- `nohup` (no hang up) launches what cames afterwards as an independent process which is independent
+of the current session.
+- The `&` isn't strictly needed but will give you back a prompt in case you want to log in while the
+measurements are running in the background.
+- Any text preceded by a # in bash will not be executed, so add some information
+what the above line is doing.
+
 ## Part 3: Assembly
 
 You should now have a fully programmed pi, and a fully wired sensor network. All
