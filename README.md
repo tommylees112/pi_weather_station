@@ -1,22 +1,51 @@
-## OxPi-Weather
+# Raspberry Pi Weather stations
 
-Our attempt to make the Makerlife weather stations into an Oxford-wide network of weather stations.
+![image](https://user-images.githubusercontent.com/25530332/192252861-2d898804-bf3b-4320-9dc0-1399f69e9c74.png)
 
-For use on the DTP Fieldtrip in September 2018
+The aim of this project is to build an automated weather station that you can
+deploy in Wytham Woods, and that will automatically record
+temperature, wind speed and rainfall, ready for analysis.
+The measurement devices are connected to a Raspberry Pi mini-computer, such that
+the weather station is (with a power bank) fully autonomous and can be left outside
+for as long as the power bank lasts.
 
-FOR HACKATHON:
-https://docs.google.com/spreadsheets/d/1Zh1kQ_CAJBCYu8eUjiUZ-kEeW5tWFsw-O7QZ8MB_2cs/edit?usp=sharing
+The project has two parts
+- assembling and wiring up the three sensors
+- customising the Python script on the Raspberry Pi that will monitor the sensors
 
-### Kit to buy:
-CPC:
-- https://cpc.farnell.com/sparkfun-electronics/sen-08942/weather-meters-kit/dp/MK00632?mckv=s1f2prvOj_dc|pcrid|224695413754|kword||match||plid||slid||product|MK00632|pgrid|49734137191|ptaid|pla-368614084742|&CMP=KNC-GUK-CPC-SHOPPING&gclid=CjwKCAjwtvnbBRA5EiwAcRvnpkAfWKnzpNPCwOu68B6ICB9kAPP8sgQj0gtWAZR7BPUf-90pRnuaXxoCD30QAvD_BwE
-- https://cpc.farnell.com/unbranded/mf25-4k7/resistor-0-25w-1-4k7/dp/RE03757?st=4.7k%20resistor
-- https://cpc.farnell.com/pro-power/10atrans/terminal-block-transparent-10a/dp/CB17644
-- https://cpc.farnell.com/schneider-electric-sarel/enn05007/junction-box-ip55-150x105x80mm/dp/EN82215?st=schneider%20electric%20Enclosure
-- https://cpc.farnell.com/pro-power/m32grey1/m32-cable-gland-grey/dp/CB08629?mckv=soaA4oDKF_dc|pcrid|224645119674|kword||match||plid||slid||product|CB08629|pgrid|52698577371|ptaid|pla-417047596988|&CMP=KNC-GUK-CPC-SHOPPING&gclid=CjwKCAjwtvnbBRA5EiwAcRvnpscSTp371QKCfq-Bwr0rnhvYLVUqyu9iaTtj3Sh7Y6l5SqQVt7yEJxoCMj4QAvD_BwE
+These parts can be done largely in parallel, so it might be sensible to split up into two smaller groups.
 
-Other:
-- https://shop.pimoroni.com/products/jumper-jerky-junior?variant=1076482177
-- https://thepihut.com/products/adafruit-precision-screwdriver-set-6-pieces
-- https://thepihut.com/products/wire-strippers
-- https://www.amazon.co.uk/dp/B01MY9QR49/ref=asc_df_B01MY9QR4955039961/?tag=googshopuk-21&creative=22146&creativeASIN=B01MY9QR49&linkCode=df0&hvadid=214190284008&hvpos=1o2&hvnetw=g&hvrand=1030403367794447249&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9060161&hvtargid=pla-348168842853
+### The kit needed for the Pi weather stations
+
+- [ ] 1 raspberry pi
+- [ ] 1 power bank
+- [ ] 1 USB to micro USB adapter (for power)
+- [ ] 1 temperature sensor
+- [ ] 1 rain gauge
+- [ ] 1 weather vane
+- [ ] 1 anemometer
+- [ ] Poles for mounting the wind sensors
+- [ ] 1 wiring connector box
+- [ ] 1 4.7K Ohm resistor
+- [ ] 7 GPIO connectors
+- [ ] 1 weatherproof box (to weatherproof the pi)
+- [ ] 1 tupperware box (for the power banks that are too large for the weatherproof box) 
+
+## Part 1: Hardware
+
+Your final weather station will have three operational sensors, a thermometer, an
+anemometer (wind speed sensor) and a rain gauge. Some anemometers require the weather
+vane to be connected to the Raspberry Pi, others work independent of the weather vane.
+
+### Step 1: Prepare the sensor cables
+
+- *The thermometer:* strip about 1cm of insulation from each of the three
+wires and braid the copper together. The red wire will be connected to
+power, the black wire to ground, and the yellow wire will output the
+temperature data.
+- *The wind sensor:* Plug the ethernet connector on the wind speed sensor
+into the port on the underside of the weather vane. The cable coming out
+of the weather vane has 4 wires, we shall only be using the red and yellow
+ones. Strip 1cm of insulation from each, and braid.
+- *The rain sensor:* strip and braid both cables. Red is data, green is ground.
+
