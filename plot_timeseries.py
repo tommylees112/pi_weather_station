@@ -15,11 +15,21 @@ time = []
 temp = []
 rain = []
 wind = []
+# OPTIONS
+path = "/Users/milan/git/pi_weather_station/data/2022/"
+codenames = ["mulberry","strawberry","summer","justice_for_Toph"]
+
+# preallocate
+time = []
+temp = []
+rain = []
+wind = []
 
 # manual start date in case pi clock is off
-t_start1 = datetime.datetime(2018,9,20,14)
-t_start2 = datetime.datetime(2018,9,20,13,35)
-t_start3 = datetime.datetime(2018,9,20,14,22)
+t_start1 = datetime.datetime(2022,9,27,15)
+t_start2 = datetime.datetime(2022,9,27,15)
+t_start3 = datetime.datetime(2022,9,27,15)
+t_start4 = datetime.datetime(2022,9,27,15)
 
 for cn in codenames:
 
@@ -48,21 +58,21 @@ for cn in codenames:
         # correct time
         t0 = dateutil.parser.parse(timestrings[0])
 
-        if cn == "elderberry":
+        if cn == "mulberry":
             dt = t_start1 - t0
-        elif cn == "roady":
+        elif cn == "strawberry":
             dt = t_start2 - t0
-        elif cn == "stormrider_steve":
+        elif cn == "summer":
             dt = t_start3 - t0
-        elif cn == "raspberry":
-            dt = datetime.timedelta(hours=0.3)
+        elif cn == "justice_for_Toph":
+            dt = t_start4 - t0
         time_cn.append([dateutil.parser.parse(s)+dt for s in timestrings])
 
     time.append(time_cn)
     temp.append(temp_cn)
     rain.append(rain_cn)
     wind.append(wind_cn)
-
+    
 ## plotting
 
 fig,(ax1,ax2,ax3) = plt.subplots(3,1,sharex=True)
