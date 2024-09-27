@@ -17,7 +17,7 @@ These parts can be done largely in parallel, so it might be sensible to split up
 
 ### The kit needed for the Pi weather stations
 
-- [ ] 1 raspberry pi
+- [ ] 1 raspberry pi (check name on the back)
 - [ ] 1 power bank
 - [ ] 1 USB to micro USB adapter (for power)
 - [ ] 1 temperature sensor
@@ -131,18 +131,19 @@ You find the username and address in the following table
 | - | - | - | - |
 | summer | pi | summer.local | raspberry |
 | spring | pi | spring.local | raspberry |
-| mulberry | pi | mulberrypi.local | raspberry |
-| strawberry | pi | strawberrypi.local | raspberry |
+| autumn | pi | autumn.local | raspberry |
+| mulberry | pi | mulberry.local | raspberry |
+| gooseberry | pi | gooseberry.local | raspberry |
 
 If everything went well you will get a prompt that look similar to
 
 ```
-pi@summer:
+pi@summer:~ $
 ```
 
 which lets you type commands, then hit enter.
 Example: type `ls`, short for *list*, that shows you files and folders in the current directory.
-All Pis already have a folder called `pi_weather_station`.
+All pis already have a folder called `pi_weather_station`.
 
 ### Step 2: Changing the python script
 
@@ -156,14 +157,14 @@ on github at
 
 https://github.com/milankl/pi_weather_station/blob/master/weatherstation.py
 
-- You can edit text intuitively, for saving use cntrl+o then enter, for exiting cntrl+x.
+- You can edit text intuitively, for saving use `cntrl+o` then enter, for exiting `cntrl+x`.
 - You will not need to fiddle too much with the code (unless you want to!),
 but you will want to think about the values of some of the constants.
-CSVOUTPUT controls whether the pi prints results to terminal or saves
-them in a .csv file, and OUTPUT_DT sets the time between measurements.
+`CSVOUTPUT` controls whether the pi prints results to terminal or saves
+them in a `.csv` file, and `OUTPUT_DT` sets the time between measurements (in seconds).
 You also want to set ‘codename’ to the name of your pi.
 - If you have connected any of the data cables to different pins than the
-default suggestion, then you will have to change the value of the DATA_PIN
+default suggestion, then you will have to change the value of the `DATA_PIN`
 constants accordingly
 
 For testing purposes you can always do
@@ -171,7 +172,7 @@ For testing purposes you can always do
 ```
 python weatherstation.py
 ```
-if the CSV_OUTPUT is set to 0, it will print measurements to the terminal.
+if the `CSV_OUTPUT` is set to 0, it will print measurements to the terminal.
 
 ### Step 3: Initialisation script
 
@@ -180,16 +181,16 @@ pi when the script should be run. To do this, you need to open the `.bashrc` fil
 which contains all commands that the pi executes at boot up.
 
 - Type `nano .bashrc` to open the file
-- At the bottom of the file you will need to add
+- At the bottom of the file you will need to uncomment this line
 
 ```
 nohup python pi_weather_station/weatherstation.py &
 ```
-- `nohup` (no hang up) launches what cames afterwards as an independent process which is independent
-of the current session.
+- `nohup` (no hang up) launches what cames afterwards as a process independent
+of the current terminal session.
 - The `&` isn't strictly needed but will give you back a prompt in case you want to log in while the
 measurements are running in the background.
-- Any text preceded by a # in bash will not be executed, so add some information
+- Any text preceded by a `#` in the bash shell will not be executed, so add some information
 what the above line is doing.
 
 ## Part 3: Assembly
@@ -209,6 +210,6 @@ Make sure that you power on your power bank before leaving!
 
 # Credits
 
-Originally written by Josh Dorrington, Tommy Lees and Milan Kloewer in 2018.
-Changes made in 2022 by Milan Kloewer.
+Originally written by Josh Dorrington, Tommy Lees and Milan Klöwer in 2018.
+Changes made in 2022 and 2024 by Milan Klöwer.
 
