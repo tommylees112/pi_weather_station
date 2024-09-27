@@ -87,7 +87,8 @@ GPIO pins as shown:
 ![image](https://user-images.githubusercontent.com/25530332/192257320-45daf17d-3004-4b39-8a94-fbd03cc54821.png)
 
 Attach the GPIO connectors to the correct type of pins on the raspberry pi
-as follows:
+as follows. The orientation is such that most of the pi is below this diagram,
+which is also so that the letters GPIO on the board are the correct way around.
 
 ![image](https://user-images.githubusercontent.com/25530332/192257095-890af097-697b-4c2b-a0be-4c2a2dd1edf4.png)
 
